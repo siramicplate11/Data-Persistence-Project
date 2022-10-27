@@ -12,6 +12,7 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text HighScoreText;
     
     private bool m_Started = false;
     private int m_Points;
@@ -24,6 +25,8 @@ public class MainManager : MonoBehaviour
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
+
+        HighScoreText.text = "Best Score: " + MainHandler.Instance.playerName + ":" + MainHandler.Instance.highscore;
         
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
@@ -70,6 +73,13 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if(m_Points>MainHandler.Instance.highscore)
+        {
+            MainHandler.Instance.highscore = m_Points;
+            MainHandler.Instance.playerName = MainHandler.Instance.temporaryName;
+        }
+        MainHandler.Instance.SaveGame();
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
